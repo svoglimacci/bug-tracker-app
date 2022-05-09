@@ -9,41 +9,41 @@ on:
 jobs:
   deployment_pipeline:
     runs-on: ubuntu-latest
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    -name: Node Setup
-      uses: actions/setup-node@v3
-      with:
-        node-version: "16"
-    - name: Install
-      run: npm install
-    - name: Lint
-      run: npm run eslint
-    - name: Test
-      run: npm run test
-    - name: E2E Test
-      uses: cypress-io/github-action@v3
-      with:
-        command: npm run test:e2e
-        build: npm run build
-        start: npm run start-prod
-        wait-on: http://localhost:3000
-    - name: Commit messages
-      env:
-        COMMIT_MESSAGES: ${{ join(toJson(github.event.commits.*.message)) }}
-      run: echo "$COMMIT_MESSAGES"
-      name: heroku deploy
-      if: ${{ github.event_name == 'push '}}
-      uses: akhileshns/heroku-deploy@v3.12.12
-      with:
-        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-        heroku_app_name: ${{secrets.HEROKU_APP_ID}}
-        heroku_email: ${{secrets.HEROKU_EMAIL}}
-        healthcheck: https://${{secrets.HEROKU_APP_ID}}.herokuapp.com/health
-        checkstring: 'ok'
-        delay: 5
-        rollbackonhealthcheckfailed: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      -name: Node Setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Install
+        run: npm install
+      - name: Lint
+        run: npm run eslint
+      - name: Test
+        run: npm run test
+      - name: E2E Test
+        uses: cypress-io/github-action@v3
+        with:
+          command: npm run test:e2e
+          build: npm run build
+          start: npm run start-prod
+          wait-on: http://localhost:3000
+      - name: Commit messages
+        env:
+          COMMIT_MESSAGES: ${{ join(toJson(github.event.commits.*.message)) }}
+        run: echo "$COMMIT_MESSAGES"
+        name: heroku deploy
+        if: ${{ github.event_name == 'push '}}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_ID}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          healthcheck: https://${{secrets.HEROKU_APP_ID}}.herokuapp.com/health
+          checkstring: 'ok'
+          delay: 5
+          rollbackonhealthcheckfailed: true
   tag_release:
     needs: [deployment_pipeline]
     runs-on: ubuntu-latest
