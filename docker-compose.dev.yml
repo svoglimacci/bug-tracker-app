@@ -9,7 +9,7 @@ services:
     volumes:
       - ./frontend/:/usr/src/app
     ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+      - 3000:3000
     env_file: .env
 
   backend:
@@ -21,10 +21,13 @@ services:
     volumes:
        - ./backend/:/usr/src/app
     ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - 3001:3001
+    environment:
+      - PGUSER=postgres
+      - PGPASSWORD=password
+      - PGDATABASE=postgres
+      - PGHOST=database
     depends_on:
-      - database
-    links:
       - database
 
   database:
@@ -34,7 +37,10 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    env_file: .env
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
 
   debug:
     image: busybox
