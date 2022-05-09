@@ -1,0 +1,15 @@
+FROM node:lts-alpine
+
+WORKDIR /usr/src/app
+
+COPY --chown=node . .
+
+RUN npm install -g ts-node
+RUN npm install -g nodemon
+RUN npm install
+
+EXPOSE $BACKEND_PORT
+
+USER node
+
+CMD ["npm", "run", "dev"]

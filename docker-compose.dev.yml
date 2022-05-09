@@ -1,0 +1,55 @@
+version: '3'
+services:
+  frontend:
+    image: app-frontend
+    container_name: app-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./frontend/:/usr/src/app
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    env_file: .env
+
+  backend:
+    image: app-backend
+    container_name: app-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    volumes:
+       - ./backend/:/usr/src/app
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    depends_on:
+      - database
+    links:
+      - database
+
+  database:
+    image: postgres
+    container_name: database
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    env_file: .env
+
+  debug:
+    image: busybox
+    container_name: debug
+
+  reverse-proxy:
+    image: nginx
+    container_name: reverse-proxy
+    volumes:
+      - ./nging.conf:\etc\nginx\nginx.conf:ro
+    ports:
+     - 8080:80
+    depends_on:
+     - frontend
+     - backend
+
+volumes:
+  pgdata:
