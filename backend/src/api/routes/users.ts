@@ -4,7 +4,7 @@ import * as userController from '../controllers/user';
 
 const usersRouter = Router();
 
-usersRouter.get(':/id', async (req: Request, res: Response) => {
+usersRouter.get('/:id', async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const result = await userController.getById(id);
   return res.status(200).send(result);

@@ -1,6 +1,5 @@
-export default interface User {
+export default interface Auth {
   id: number;
-  email: string;
   username: string;
   password: string;
 }

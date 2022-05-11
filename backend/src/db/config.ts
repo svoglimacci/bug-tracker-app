@@ -13,4 +13,5 @@ const sequelize = new Sequelize(
   },
 );
 
+export const SECRET = process.env.SECRET || 'secret';
 export default sequelize;

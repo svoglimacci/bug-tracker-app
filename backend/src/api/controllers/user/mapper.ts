@@ -1,11 +1,11 @@
-import User from '../../interfaces';
+import User from '../../interfaces/user.interface';
 import { UserOutput } from '../../../db/models/User';
 
 export const toUser = (user: UserOutput): User => ({
   id: user.id,
-  name: user.name,
+  email: user.email,
   username: user.username,
-  password: user.passwordHash,
+  password: user.password,
 });
 
 export default toUser;

@@ -1,6 +1,6 @@
 import * as service from '../../../db/services/userService';
 import { CreateUserDTO, UpdateUserDTO, FilterUsersDTO } from '../../dto/user.dto';
-import User from '../../interfaces';
+import User from '../../interfaces/user.interface';
 import * as mapper from './mapper';
 
 export const create = async (payload: CreateUserDTO): Promise<User> =>

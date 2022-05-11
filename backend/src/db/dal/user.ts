@@ -1,6 +1,5 @@
 import { Op } from 'sequelize';
-import User from '../models';
-import { UserInput, UserOutput } from '../models/User';
+import User, { UserInput, UserOutput } from '../models/User';
 import { GetAllUsersFilters } from './types';
 
 export const create = async (payload: UserInput): Promise<UserOutput> => {
@@ -20,7 +19,6 @@ export const update = async (id: number, payload: Partial<UserInput>): Promise<U
 export const getById = async (id: number): Promise<UserOutput> => {
   const user = await User.findByPk(id);
   if (!user) {
-    // @todo throw custom error
     throw new Error('not found');
   }
   return user;

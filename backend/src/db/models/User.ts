@@ -1,11 +1,12 @@
 import { DataTypes, Model, Optional } from 'sequelize';
+import bcrypt from 'bcrypt';
 import sequelize from '../config';
 
 interface UserAttributes {
   id: number;
-  name: string;
+  email: string;
   username: string;
-  passwordHash: string;
+  password: string;
 }
 
 export interface UserInput extends Optional<UserAttributes, 'id'> {}
@@ -14,11 +15,11 @@ export interface UserOutput extends Required<UserAttributes> {}
 class User extends Model<UserAttributes, UserInput> implements UserAttributes {
   public id!: number;
 
-  public name!: string;
+  public email!: string;
 
   public username!: string;
 
-  public passwordHash!: string;
+  public password!: string;
 }
 
 User.init(
@@ -26,9 +27,10 @@ User.init(
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
+      allowNull: false,
       primaryKey: true,
     },
-    name: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -37,12 +39,28 @@ User.init(
       unique: true,
       allowNull: false,
     },
-    passwordHash: {
+    password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   },
   {
+    hooks: {
+      beforeCreate: async (user) => {
+        if (user.password) {
+          const passwordHash = await bcrypt.hash(user.password, 10);
+          // eslint-disable-next-line no-param-reassign
+          user.password = passwordHash;
+        }
+      },
+      beforeUpdate: async (user) => {
+        if (user.password) {
+          const passwordHash = await bcrypt.hash(user.password, 10);
+          // eslint-disable-next-line no-param-reassign
+          user.password = passwordHash;
+        }
+      },
+    },
     timestamps: false,
     sequelize,
     underscored: true,

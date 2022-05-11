@@ -1,10 +1,9 @@
 import { Optional } from 'sequelize/types';
 
 export type CreateUserDTO = {
-  id: number;
-  name: string;
+  email: string;
   username: string;
-  passwordHash: string;
+  password: string;
 };
 
 export type UpdateUserDTO = Optional<CreateUserDTO, 'username'>;

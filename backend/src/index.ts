@@ -17,7 +17,7 @@ export const get = () => {
         message: `Welcome to bugtracker API! \n Endpoints available at http://localhost:${PORT}/api/v1`,
       }),
   );
-  app.use('/api/v1', routes);
+  app.use('/api/', routes);
 
   return app;
 };
