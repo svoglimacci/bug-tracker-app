@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Container,
   Stack,
@@ -11,20 +11,23 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from '@chakra-ui/react';
-import authService from '../services/authService';
-import LoginForm from '../components/LoginForm';
 
+import { useNavigate, useLocation } from 'react-router-dom';
+import LoginForm from '../components/LoginForm';
+import { login } from '../reducers/authReducer';
+import { useAppDispatch } from '../hooks';
+
+// eslint-disable-next-line react/prop-types
+// eslint-disable-next-line react/function-component-definition
 function LoginPage() {
-  const [user, setUser] = useState(null); // server response saved to the user field
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location: any = useLocation();
+  const from = location.state?.from?.pathname || '/';
 
   const handleLogin = async (values: { username: string; password: string }) => {
-    try {
-      const user = await authService.login(values);
-      setUser(user);
-      console.log('Logged in', user);
-    } catch (exception) {
-      console.log('Wrong credentials', user);
-    }
+    dispatch(login(values));
+    navigate(from, { replace: true });
   };
 
   return (

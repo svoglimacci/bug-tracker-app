@@ -12,7 +12,15 @@ import {
 import * as React from 'react';
 import { FiMenu } from 'react-icons/fi';
 
+import { useAppDispatch } from '../hooks';
+import { logout } from '../reducers/authReducer';
+
 export function NavBar() {
+  const dispatch = useAppDispatch();
+
+  const handleLogout = async () => {
+    dispatch(logout());
+  };
   const isDesktop = useBreakpointValue({ base: false, lg: true });
   return (
     <Box as="section" pb={{ base: '12', md: '24' }}>
@@ -23,7 +31,9 @@ export function NavBar() {
               <Flex justify="space-between" flex="1">
                 <ButtonGroup variant="link" spacing="8" />
                 <HStack spacing="3">
-                  <Button variant="ghost">Log out</Button>
+                  <Button onClick={handleLogout} variant="ghost">
+                    Log out
+                  </Button>
                 </HStack>
               </Flex>
             ) : (
