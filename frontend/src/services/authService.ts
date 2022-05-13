@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { LoginFormValues } from '../types';
+import apiBaseUrl from '../constants';
 
-const baseUrl = '/api/login';
+const login = async (credentials: { username: string; password: string }) => {
+  const response = await axios.post(`${apiBaseUrl}/login`, credentials);
+  return response.data;
+};
 
-// eslint-disable-next-line import/prefer-default-export
-export const login = async (values: LoginFormValues) =>
-  axios.post(baseUrl, values).then((response) => response.data);
+export default { login };
