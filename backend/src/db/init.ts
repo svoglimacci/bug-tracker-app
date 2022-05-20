@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
-import Session from './models/Session';
-import User from './models/User';
+import { Session, User, Project } from './models';
 
 dotenv.config();
 
@@ -10,6 +9,7 @@ const isTest = process.env.NODE_ENV !== 'test';
 const dbInit = () => {
   User.sync({ alter: isDev || isTest });
   Session.sync({ alter: isDev || isTest });
+  Project.sync({ alter: isDev || isTest });
 };
 
 export default dbInit;

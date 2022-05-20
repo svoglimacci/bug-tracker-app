@@ -1,5 +1,5 @@
 import { Session } from '../../interfaces/index';
-import * as service from '../../../db/services/session';
+import * as service from '../../../db/services/SessionService';
 import { LoginDTO } from '../../dto/session.dto';
 import * as mapper from './mapper';
 

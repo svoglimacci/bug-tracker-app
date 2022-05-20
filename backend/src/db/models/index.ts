@@ -1,4 +1,5 @@
 import Session from './Session';
 import User from './User';
+import Project from './Project';
 
-export { Session, User };
+export { Project, Session, User };
