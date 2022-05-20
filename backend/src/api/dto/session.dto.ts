@@ -1,5 +1,4 @@
-export interface User {
-  id: number;
+export type LoginDTO = {
   username: string;
   password: string;
-}
+};

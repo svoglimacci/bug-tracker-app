@@ -3,10 +3,13 @@ FROM node:lts-alpine
 WORKDIR /usr/src/app
 
 COPY --chown=node . .
+RUN apk add --no-cache python3 g++ make
+RUN npm install
+RUN npm rebuild bcrypt --build-from-source
+RUN apk del make gcc g++ python3
 
 RUN npm install -g ts-node
 RUN npm install -g nodemon
-RUN npm install
 
 EXPOSE $BACKEND_PORT
 

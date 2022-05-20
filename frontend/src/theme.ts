@@ -6,7 +6,7 @@ const theme = extendTheme({
   styles: {
     global: (props: Dict<any> | StyleFunctionProps) => ({
       body: {
-        bg: mode('gray.100', 'whiteAlpha.900')(props),
+        bg: mode('whiteAlpha.900', 'whiteAlpha.900')(props),
       },
     }),
   },

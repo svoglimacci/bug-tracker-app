@@ -6,7 +6,6 @@ import AuthService from '../services/auth';
 import type { RootState } from '../store';
 
 const user = localStorage.getItem('user');
-console.log(localStorage.getItem('user'));
 
 interface UserAttributes {
   username: string;
@@ -31,8 +30,8 @@ export const login = createAsyncThunk(
   },
 );
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await AuthService.logout();
+export const logout = createAsyncThunk('auth/logout', async (userId: number) => {
+  await AuthService.logout(userId);
 });
 
 const initialState = user ? { isLoggedIn: true, user } : { isLoggedIn: false, user: null };

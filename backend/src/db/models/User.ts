@@ -4,7 +4,6 @@ import sequelize from '../config';
 
 interface UserAttributes {
   id: number;
-  email: string;
   username: string;
   password: string;
 }
@@ -14,8 +13,6 @@ export interface UserOutput extends Required<UserAttributes> {}
 
 class User extends Model<UserAttributes, UserInput> implements UserAttributes {
   public id!: number;
-
-  public email!: string;
 
   public username!: string;
 
@@ -29,10 +26,6 @@ User.init(
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
     },
     username: {
       type: DataTypes.STRING,

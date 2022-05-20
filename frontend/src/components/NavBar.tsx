@@ -1,16 +1,5 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Flex,
-  HStack,
-  IconButton,
-  useBreakpointValue,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Flex, Spacer } from '@chakra-ui/react';
 import * as React from 'react';
-import { FiMenu } from 'react-icons/fi';
 
 import { useAppDispatch } from '../hooks';
 import { logout } from '../reducers/authReducer';
@@ -18,35 +7,31 @@ import { logout } from '../reducers/authReducer';
 export function NavBar() {
   const dispatch = useAppDispatch();
 
-  const handleLogout = async () => {
-    dispatch(logout());
+  const storedUser = localStorage.getItem('user');
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const handleLogout = async (userId: number) => {
+    dispatch(logout(userId));
   };
-  const isDesktop = useBreakpointValue({ base: false, lg: true });
   return (
-    <Box as="section" pb={{ base: '12', md: '24' }}>
-      <Box as="nav" bg="bg-surface" boxShadow={useColorModeValue('sm', 'sm-dark')}>
-        <Container py={{ base: '4', lg: '5' }}>
-          <HStack spacing="10" justify="space-between">
-            {isDesktop ? (
-              <Flex justify="space-between" flex="1">
-                <ButtonGroup variant="link" spacing="8" />
-                <HStack spacing="3">
-                  <Button onClick={handleLogout} variant="ghost">
-                    Log out
-                  </Button>
-                </HStack>
-              </Flex>
-            ) : (
-              <IconButton
-                variant="ghost"
-                icon={<FiMenu fontSize="1.25rem" />}
-                aria-label="Open Menu"
-              />
-            )}
-          </HStack>
-        </Container>
+    <Flex align="center" justify="space-between" wrap="wrap" w="100%" mb={8} p={8}>
+      <Box p="2">
+        <ButtonGroup variant="link" spacing="8">
+          {['Home', 'Users', 'Projects'].map((item) => (
+            <Button key={item}>{item}</Button>
+          ))}
+        </ButtonGroup>
       </Box>
-    </Box>
+      <Spacer />
+
+      <Button
+        onClick={() => {
+          handleLogout(user.userId);
+        }}
+        variant="primary"
+      >
+        Log out
+      </Button>
+    </Flex>
   );
 }
 

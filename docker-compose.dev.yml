@@ -7,19 +7,21 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.dev
     volumes:
-      - ./frontend/:/usr/src/app
+      - ./frontend:/usr/src/app
     ports:
       - 3000:3000
     env_file: .env
 
   backend:
     image: app-backend
+    restart: always
     container_name: app-backend
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
     volumes:
-       - ./backend/:/usr/src/app
+       - ./backend:/usr/src/app
+       - /usr/src/app/node_modules
     ports:
       - 3001:3001
     environment:

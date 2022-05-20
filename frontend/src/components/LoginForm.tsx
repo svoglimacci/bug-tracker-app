@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, Formik, Form } from 'formik';
-import { Button } from '@chakra-ui/react';
+import { Button, Stack } from '@chakra-ui/react';
 import TextField from './FormField';
 
 type Props = {
@@ -26,11 +26,15 @@ function LoginForm({ onSubmit }: Props) {
     >
       {({ isValid, dirty }) => (
         <Form>
-          <Field label="Username" placeholder="Username" name="username" component={TextField} />
-          <Field label="Password" placeholder="Password" name="password" component={TextField} />
-          <Button type="submit" disabled={!dirty || !isValid}>
-            Submit
-          </Button>
+          <Stack spacing="6">
+            <Field label="Username" placeholder="Username" name="username" component={TextField} />
+            <Field label="Password" placeholder="Password" name="password" component={TextField} />
+          </Stack>
+          <Stack pt="12">
+            <Button size="lg" colorScheme="blue" type="submit" disabled={!dirty || !isValid}>
+              Sign in
+            </Button>
+          </Stack>
         </Form>
       )}
     </Formik>
