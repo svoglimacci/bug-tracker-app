@@ -4,22 +4,26 @@ import sequelize from '../config';
 interface ProjectAttributes {
   id: number;
   title: string;
-  author: string;
+  description: string;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
 }
 
-export interface ProjectInput extends Optional<ProjectAttributes, 'id'> {}
+export interface ProjectInput extends Optional<ProjectAttributes, 'id'> {
+  users?: any;
+}
 
-export interface ProjectOutput extends Required<ProjectAttributes> {}
+export interface ProjectOutput extends Required<ProjectAttributes> {
+  users?: any;
+}
 
 class Project extends Model<ProjectAttributes, ProjectInput> implements ProjectAttributes {
   public id!: number;
 
   public title!: string;
 
-  public author!: string;
+  public description!: string;
 
   public readonly createdAt!: Date;
 
@@ -31,7 +35,7 @@ class Project extends Model<ProjectAttributes, ProjectInput> implements ProjectA
 Project.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -39,7 +43,7 @@ Project.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    author: {
+    description: {
       type: DataTypes.STRING,
     },
   },

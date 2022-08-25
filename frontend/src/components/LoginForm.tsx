@@ -1,44 +1,62 @@
-import React from 'react';
-import { Field, Formik, Form } from 'formik';
-import { Button, Stack } from '@chakra-ui/react';
-import TextField from './FormField';
+/* eslint-disable react/destructuring-assignment */
+import * as React from 'react';
+import { useForm, useController, UseControllerProps } from 'react-hook-form';
+import { Grid, Link, Typography, TextField, Button, Box } from '@mui/material';
+
+type FormValues = {
+  username: string;
+  password: string;
+};
 
 type Props = {
   onSubmit: (values: { username: string; password: string }) => void;
 };
 
-function LoginForm({ onSubmit }: Props) {
+function Input(props: UseControllerProps<FormValues>) {
+  const { field } = useController(props);
+
   return (
-    <Formik
-      initialValues={{ username: '', password: '' }}
-      onSubmit={onSubmit}
-      validate={(values: { username: string; password: string }) => {
-        const requiredError = 'Field is required';
-        const errors: { [field: string]: string } = {};
-        if (!values.username) {
-          errors.name = requiredError;
-        }
-        if (!values.password) {
-          errors.name = requiredError;
-        }
-        return errors;
-      }}
-    >
-      {({ isValid, dirty }) => (
-        <Form>
-          <Stack spacing="6">
-            <Field label="Username" placeholder="Username" name="username" component={TextField} />
-            <Field label="Password" placeholder="Password" name="password" component={TextField} />
-          </Stack>
-          <Stack pt="12">
-            <Button size="lg" colorScheme="blue" type="submit" disabled={!dirty || !isValid}>
-              Sign in
-            </Button>
-          </Stack>
-        </Form>
-      )}
-    </Formik>
+    <div>
+      <TextField margin="normal" fullWidth {...field} label={props.name} />
+    </div>
   );
 }
 
-export default LoginForm;
+export default function LoginForm({ onSubmit }: Props) {
+  const { handleSubmit, control } = useForm<FormValues>({
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+    mode: 'onChange',
+  });
+
+  return (
+    <Box
+      sx={{
+        marginTop: 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <Typography component="h1" variant="h5">
+        Sign in
+      </Typography>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+        <Input control={control} name="username" rules={{ required: true }} />
+        <Input control={control} name="password" rules={{ required: true }} />
+        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          Sign In
+        </Button>
+        <Grid container>
+          <Grid item>
+            <Link href="/register" variant="body2">
+              Don&apos;t have an account? Sign Up
+            </Link>
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
+  );
+}

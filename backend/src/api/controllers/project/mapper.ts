@@ -1,10 +1,10 @@
 import { ProjectOutput } from '../../../db/models/Project';
-import { Project } from '../../interfaces';
 
-export const toProject = (project: ProjectOutput): Project => ({
+export const toProject = (project: ProjectOutput): any => ({
   id: project.id,
   title: project.title,
-  author: project.author,
+  description: project.description,
+  users: project.users,
   createdAt: project.createdAt,
   updatedAt: project.updatedAt,
   deletedAt: project.deletedAt,

@@ -1,19 +1,23 @@
-import { ColorModeScript, ChakraProvider } from '@chakra-ui/react';
-import * as React from 'react';
-import ReactDOM from 'react-dom';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import theme from './theme';
+
 import App from './App';
 import { store } from './store';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+// @ts-ignore
+const root = createRoot(container);
+console.log(store.getState());
+root.render(
   <React.StrictMode>
-    <ColorModeScript />
-    <ChakraProvider theme={theme}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </ChakraProvider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
-  document.getElementById('root'),
 );

@@ -9,7 +9,9 @@ interface UserAttributes {
 }
 
 export interface UserInput extends Optional<UserAttributes, 'id'> {}
-export interface UserOutput extends Required<UserAttributes> {}
+export interface UserOutput extends Required<UserAttributes> {
+  projects?: any;
+}
 
 class User extends Model<UserAttributes, UserInput> implements UserAttributes {
   public id!: number;

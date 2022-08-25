@@ -1,10 +1,13 @@
 import axios from 'axios';
 import apiBaseUrl from '../constants';
 
-const register = (username: string, password: string) =>
-  axios.post(`${apiBaseUrl}/users`, {
-    username,
-    password,
+const register = (credentials: { username: string; password: string }) =>
+  axios.post(`${apiBaseUrl}/users`, credentials).then((response) => {
+    if (response.data) {
+      localStorage.setItem('user', JSON.stringify(response.data));
+      console.log('signed up', response.data);
+    }
+    return response.data;
   });
 
 const login = (credentials: { username: string; password: string }) =>

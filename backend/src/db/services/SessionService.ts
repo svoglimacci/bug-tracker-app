@@ -29,5 +29,3 @@ export const login = async (payload: UserInput): Promise<SessionOutput> => {
 };
 
 export const logout = (id: number): Promise<boolean> => sessionDal.deleteById(id);
-
-export default login;

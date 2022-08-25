@@ -41,7 +41,6 @@ projectsRouter.delete('/:id', async (req: Request, res: Response) => {
 
 projectsRouter.post('/', async (req: Request, res: Response) => {
   const payload: CreateProjectDTO = req.body;
-
   const result = await controller.create(payload);
 
   return res.status(200).send(result);

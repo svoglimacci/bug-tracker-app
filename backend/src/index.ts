@@ -14,7 +14,7 @@ export const get = () => {
 
   app.get('/', async (req: Request, res: Response) => {
     res.status(202).send({
-      message: `Welcome to bugtracker API! \n Endpoints available at http://localhost:${PORT}/api/v1`,
+      message: `Welcome to bugtracker API! \n Endpoints available at http://localhost:${PORT}/api/`,
     });
   });
 

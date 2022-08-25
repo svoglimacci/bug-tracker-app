@@ -1,5 +1,5 @@
-import { Op } from 'sequelize/types';
-import { Project } from '../models';
+import { Op } from 'sequelize';
+import { Project, User } from '../models';
 import { ProjectInput, ProjectOutput } from '../models/Project';
 import { GetAllProjectsFilters } from './types';
 
@@ -36,8 +36,18 @@ export const deleteById = async (id: number): Promise<boolean> => {
   return !!numDeletedProjects;
 };
 
-export const getAll = async (filters: GetAllProjectsFilters): Promise<ProjectOutput[]> =>
+export const getAll = async (filters: GetAllProjectsFilters): Promise<any> =>
   Project.findAll({
+    include: [
+      {
+        model: User,
+        as: 'users',
+        attributes: ['username', 'id'],
+        through: {
+          attributes: [],
+        },
+      },
+    ],
     where: {
       ...(filters?.isDeleted && { deletedAt: { [Op.not]: null } }),
     },
