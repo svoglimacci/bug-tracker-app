@@ -1,9 +1,10 @@
+/* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppThunk, RootState } from '../store';
 import issuesService from '../services/issues';
 import { setMessage } from './messageReducer';
-import { IssuePayload, Issue, Note, NotePayload, Priority } from '../types';
+import { IssuePayload, Issue, NotePayload, Priority, Status } from '../types';
 
 interface IssuesState {
   issues: Issue[];
@@ -33,36 +34,53 @@ export const issuesSlice = createSlice({
     removeIssue: (state, action: PayloadAction<number>) => {
       state.issues = state.issues.filter((p) => p.id !== action.payload);
     },
-    addNote: (state, action: PayloadAction<{ note: Note; issueId: number }>) => {
-      state.issues[action.payload.issueId].notes.push(action.payload.note);
+    addNote: (
+      state,
+      action: PayloadAction<{
+        id: number;
+        userId: number;
+        summary: string;
+        issueId: number;
+        createdAt: Date;
+      }>,
+    ) => {
+      const issueIndex = state.issues.findIndex((el) => el.id === action.payload.issueId);
+      state.issues[issueIndex].notes.push(action.payload);
     },
+
     removeNote: (state, action: PayloadAction<{ noteId: number; issueId: number }>) => {
-      state.issues[action.payload.issueId].notes = state.issues[
-        action.payload.issueId
-      ].notes.filter((p) => p.id !== action.payload.noteId);
+      const issueIndex = state.issues.findIndex((el) => el.id === action.payload.issueId);
+      state.issues[issueIndex].notes = state.issues[issueIndex].notes.filter(
+        (p) => p.id !== action.payload.noteId,
+      );
     },
     updateNote: (
       state,
       action: PayloadAction<{
-        data: { summary: string; updatedAt: Date };
+        summary: string;
+        updatedAt: Date;
         issueId: number;
-        noteId: number;
+        id: number;
       }>,
     ) => {
-      state.issues[action.payload.issueId].notes = state.issues[action.payload.issueId].notes.map(
-        (p) => (p.id === action.payload.noteId ? { ...p, ...action.payload.data } : p),
+      const issueIndex = state.issues.findIndex((el) => el.id === action.payload.issueId);
+      state.issues[issueIndex].notes = state.issues[issueIndex].notes.map((p) =>
+        p.id === action.payload.id ? { ...p, ...action.payload } : p,
       );
       state.loading = false;
     },
     updateIssue: (
       state,
       action: PayloadAction<{
-        data: { summary: string; priority: Priority; updatedAt: Date };
-        issueId: number;
+        id: number;
+        summary: string;
+        priority: Priority;
+        status: Status;
+        updatedAt: Date;
       }>,
     ) => {
       state.issues = state.issues.map((p) =>
-        p.id === action.payload.issueId ? { ...p, ...action.payload.data } : p,
+        p.id === action.payload.id ? { ...p, ...action.payload } : p,
       );
       state.loading = false;
     },

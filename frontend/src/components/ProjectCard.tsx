@@ -22,15 +22,23 @@ import ProjectForm from './ProjectForm';
 function MenuButton(projectId: number, currentValues: any) {
   const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [openForm, setOpenForm] = React.useState(false);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
   const handleSelect = async () => {
     localStorage.setItem('project', `${projectId}`);
     navigate(`../Projects/${projectId}`, { replace: true });
   };
+  const handleCloseForm = () => {
+    setOpenForm(false);
+  };
+  const handleOpenForm = () => {
+    setOpenForm(true);
+  };
 
   const handleProject = (values: ProjectPayload) => {
     values.projectId = projectId;
+    console.log('edit values', values);
     dispatch(editProject(values));
   };
 
@@ -65,17 +73,20 @@ function MenuButton(projectId: number, currentValues: any) {
       >
         <MenuItem
           onClick={() => {
+            handleOpenForm();
+            handleClose();
+          }}
+        >
+          Edit
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
             handleDelete();
+            handleClose();
           }}
         >
           Delete
         </MenuItem>
-        <ProjectForm
-          onSubmit={handleProject}
-          currentValues={currentValues}
-          buttonType="menu"
-          edit
-        />
 
         <MenuItem
           onClick={() => {
@@ -85,6 +96,13 @@ function MenuButton(projectId: number, currentValues: any) {
           Select
         </MenuItem>
       </Menu>
+      <ProjectForm
+        onSubmit={handleProject}
+        currentValues={currentValues}
+        edit
+        open={openForm}
+        onClose={handleCloseForm}
+      />
     </div>
   );
 }

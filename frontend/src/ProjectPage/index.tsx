@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-shadow */
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
-import MoreHorizIcon from '@mui/icons-material/MoreVert';
+import { Box, Button, Typography } from '@mui/material';
+
 import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -16,25 +16,25 @@ import Chip from '@mui/material/Chip';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import IssueForm from '../components/IssueForm';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import {
-  createIssue,
-  selectIssues,
-  createNote,
-  deleteIssue,
-  editIssue,
-} from '../reducers/issuesReducer';
+import { createIssue, selectIssues } from '../reducers/issuesReducer';
 import { selectProjectById } from '../reducers/projectsReducer';
 import { selectAuthState } from '../reducers/authReducer';
-import { IssuePayload, NotePayload, Priority, Status } from '../types';
-import NoteForm from '../components/NoteForm';
+import { IssuePayload, Priority, Status } from '../types';
+import IssueMenu from '../components/IssueMenu';
 
+// TODO: separate MenuItems & Form to a different function. Each need a unique setOpen state.
 export default function ProjectPage() {
   const { projectId }: any = useParams();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+
   const dispatch = useAppDispatch();
 
   const { user }: any = useAppSelector(selectAuthState);
+
+  const [openIssue, setOpenIssue] = React.useState(false);
+
+  const handleCloseIssue = () => {
+    setOpenIssue(false);
+  };
 
   const handleIssue = (values: IssuePayload) => {
     values.projectId = projectId;
@@ -42,25 +42,10 @@ export default function ProjectPage() {
     dispatch(createIssue(values));
   };
 
-  const handleEdit = async (values: IssuePayload) => {
-    dispatch(editIssue(values));
+  const handleOpenIssue = () => {
+    setOpenIssue(true);
   };
 
-  const handleDelete = async (issueId: number) => {
-    dispatch(deleteIssue(issueId));
-  };
-
-  const handleNote = (values: NotePayload) => {
-    values.userId = user?.userId;
-    dispatch(createNote(values));
-  };
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const { issues } = useAppSelector(selectIssues);
 
   const selectedProject = useAppSelector((state) => selectProjectById(state, +projectId));
@@ -72,11 +57,14 @@ export default function ProjectPage() {
   ) : (
     <Box>
       <Typography variant="h3">{selectedProject.title}</Typography>
-
       <Divider />
-
       <Typography variant="h4">Issues</Typography>
+      <Button variant="outlined" onClick={handleOpenIssue}>
+        New Issue
+      </Button>
       <IssueForm
+        open={openIssue}
+        onClose={handleCloseIssue}
         onSubmit={handleIssue}
         edit={false}
         currentValues={{ summary: '', priority: Priority.Low, status: Status.Open }}
@@ -99,7 +87,8 @@ export default function ProjectPage() {
                   <Link
                     component={RouterLink}
                     to={`/projects/${issue.projectId}/issues/${issue.id}`}
-                    color="secondary"
+                    color="inherit"
+                    underline="none"
                   >
                     {issue.summary}
                   </Link>
@@ -114,40 +103,7 @@ export default function ProjectPage() {
                   <Chip label={issue.notes?.length || 0} />
                 </TableCell>
                 <TableCell>
-                  <IconButton
-                    id="basic-button"
-                    aria-controls={open ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClick}
-                  >
-                    <MoreHorizIcon />
-                  </IconButton>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                  >
-                    <NoteForm
-                      issueId={issue.id}
-                      onSubmit={handleNote}
-                      edit={false}
-                      currentValues={{ summary: '' }}
-                      menu
-                    />
-                    <MenuItem
-                      onClick={() => {
-                        handleDelete(issue.id);
-                      }}
-                    >
-                      Delete
-                    </MenuItem>
-                    <IssueForm onSubmit={handleEdit} currentValues={issue} edit />
-                  </Menu>
+                  <IssueMenu issue={issue} user={user} />
                 </TableCell>
               </TableRow>
             ))}

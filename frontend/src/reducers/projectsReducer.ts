@@ -21,21 +21,24 @@ export const projectsSlice = createSlice({
   reducers: {
     setProjects: (state, action: PayloadAction<Project[]>) => {
       state.projects = action.payload;
-      state.loading = false;
     },
     addProject: (state, action: PayloadAction<Project>) => {
       state.projects.push(action.payload);
+
       state.loading = false;
     },
     updateProject: (
       state,
       action: PayloadAction<{
-        data: { title: string; description: string; users: User[]; updatedAt: Date };
-        projectId: number;
+        id: number;
+        title: string;
+        description: string;
+        users: User[];
+        updatedAt: Date;
       }>,
     ) => {
       state.projects = state.projects.map((p) =>
-        p.id === action.payload.projectId ? { ...p, ...action.payload.data } : p,
+        p.id === action.payload.id ? { ...p, ...action.payload } : p,
       );
       state.loading = false;
     },
@@ -74,6 +77,7 @@ export const editProject =
     try {
       dispatch(setProjectsLoading());
       const updatedProject = await projectsService.edit(projectData);
+
       dispatch(updateProject(updatedProject));
     } catch (error: any) {
       const message =
@@ -83,7 +87,6 @@ export const editProject =
       dispatch(setMessage(message));
     }
   };
-
 export const getProjects = (): AppThunk => async (dispatch) => {
   try {
     dispatch(setProjectsLoading());

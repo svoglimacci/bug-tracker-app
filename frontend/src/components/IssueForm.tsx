@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import AddIcon from '@mui/icons-material/Add';
 
 import { Priority, Status } from '../types';
 
@@ -26,17 +25,13 @@ type Props = {
   }) => void;
   edit: boolean;
   currentValues: { summary: string; priority: Priority; id?: number; status: Status };
+  open: boolean;
+  onClose: () => void;
 };
 
-export default function IssueForm({ onSubmit, edit, currentValues }: Props) {
-  const [openForm, setOpenForm] = React.useState(false);
-
-  const handleOpenForm = () => {
-    setOpenForm(true);
-  };
-
-  const handleCloseForm = () => {
-    setOpenForm(false);
+export default function IssueForm({ onSubmit, edit, currentValues, open, onClose }: Props) {
+  const handleClose = () => {
+    onClose();
   };
   type StatusOption = { value: Status; label: string };
   const statusOptions: StatusOption[] = [
@@ -76,57 +71,51 @@ export default function IssueForm({ onSubmit, edit, currentValues }: Props) {
         : { summary: '', priority: Priority.Low, status: Status.Open },
   });
   return (
-    <div>
-      {edit === true ? (
-        <MenuItem
-          onClick={() => {
-            handleOpenForm();
-          }}
-        >
-          Edit
-        </MenuItem>
-      ) : (
-        <Button
-          startIcon={<AddIcon />}
-          onClick={handleOpenForm}
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          New Issue
-        </Button>
-      )}
-
-      <Dialog open={openForm} onClose={handleCloseForm}>
-        <DialogTitle
-          sx={{
-            pb: 0,
-          }}
-        >
-          {edit === true ? 'Edit issue' : 'Create new issue'}
-        </DialogTitle>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogContent>
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle
+        sx={{
+          pb: 0,
+        }}
+      >
+        {edit === true ? 'Edit issue' : 'Create new issue'}
+      </DialogTitle>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogContent>
+          <Controller
+            name="summary"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                autoFocus
+                margin="dense"
+                label="Summary"
+                type="text"
+                fullWidth
+                variant="outlined"
+                {...field}
+              />
+            )}
+          />
+          <Controller
+            name="priority"
+            control={control}
+            render={({ field }) => (
+              <Select margin="dense" fullWidth variant="outlined" {...field}>
+                {priorityOptions.map((option: any) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          {edit === true ? (
             <Controller
-              name="summary"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  label="Summary"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  {...field}
-                />
-              )}
-            />
-            <Controller
-              name="priority"
+              name="status"
               control={control}
               render={({ field }) => (
                 <Select margin="dense" fullWidth variant="outlined" {...field}>
-                  {priorityOptions.map((option: any) => (
+                  {statusOptions.map((option: any) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -134,30 +123,15 @@ export default function IssueForm({ onSubmit, edit, currentValues }: Props) {
                 </Select>
               )}
             />
-            {edit === true ? (
-              <Controller
-                name="status"
-                control={control}
-                render={({ field }) => (
-                  <Select margin="dense" fullWidth variant="outlined" {...field}>
-                    {statusOptions.map((option: any) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                )}
-              />
-            ) : null}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseForm}>Cancel</Button>
-            <Button type="submit" onClick={handleCloseForm}>
-              {edit === true ? 'Edit' : 'Create '}
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </div>
+          ) : null}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit" onClick={handleClose}>
+            {edit === true ? 'Edit' : 'Create '}
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
   );
 }

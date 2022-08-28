@@ -1,7 +1,7 @@
 import { Avatar, Typography, Box, Card, Stack, IconButton, ButtonGroup } from '@mui/material';
 import * as React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import EditIcon from '@mui/icons-material/Edit';
 import { formatDistance } from 'date-fns';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { selectUserById } from '../reducers/usersReducer';
@@ -10,10 +10,18 @@ import { editNote, deleteNote } from '../reducers/issuesReducer';
 import NoteForm from './NoteForm';
 
 export default function NoteCard(note: Note) {
+  const [openForm, setOpenForm] = React.useState(false);
+
   const dispatch = useAppDispatch();
   const { id, summary, userId, createdAt, issueId } = note;
   const selectedUser = useAppSelector((state) => selectUserById(state, userId));
   const result = formatDistance(new Date(createdAt), new Date());
+  const handleCloseForm = () => {
+    setOpenForm(false);
+  };
+  const handleClick = () => {
+    setOpenForm(true);
+  };
   const handleDelete = async () => {
     dispatch(deleteNote(issueId, id));
   };
@@ -42,16 +50,25 @@ export default function NoteCard(note: Note) {
             >
               <DeleteIcon />
             </IconButton>
-
-            <NoteForm
-              issueId={issueId}
-              onSubmit={handleEdit}
-              currentValues={note}
-              edit
-              menu={false}
-            />
+            <IconButton
+              color="primary"
+              aria-label="delete"
+              onClick={() => {
+                handleClick();
+              }}
+            >
+              <EditIcon />
+            </IconButton>
           </ButtonGroup>
         </Stack>
+        <NoteForm
+          issueId={issueId}
+          onSubmit={handleEdit}
+          currentValues={note}
+          edit
+          open={openForm}
+          onClose={handleCloseForm}
+        />
       </Box>
     </Card>
   );
