@@ -9,6 +9,11 @@ export interface ProjectState {
   updatedAt: Date;
 }
 
+export interface MessagePayload {
+  message: string;
+  type: 'success' | 'error';
+}
+
 export enum Priority {
   Urgent = 'Urgent',
   High = 'High',

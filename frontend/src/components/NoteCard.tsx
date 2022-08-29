@@ -1,4 +1,4 @@
-import { Avatar, Typography, Box, Card, Stack, IconButton, ButtonGroup } from '@mui/material';
+import { Avatar, Typography, Box, Stack, IconButton, ButtonGroup } from '@mui/material';
 import * as React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -29,47 +29,45 @@ export default function NoteCard(note: Note) {
     dispatch(editNote(values));
   };
   return (
-    <Card key={id} sx={{ m: 1 }}>
-      <Box sx={{ m: 2 }}>
-        <Stack alignItems="start" spacing={2}>
-          <Stack spacing={2} direction="row" alignItems="center">
-            <Avatar>{selectedUser?.username.charAt(0)}</Avatar>
-            <Typography fontWeight="bold">{selectedUser?.username}</Typography>
-            <Typography>{result} ago</Typography>
-          </Stack>
-          <Stack>
-            <Typography>{summary}</Typography>
-          </Stack>
-          <ButtonGroup>
-            <IconButton
-              color="primary"
-              aria-label="delete"
-              onClick={() => {
-                handleDelete();
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-            <IconButton
-              color="primary"
-              aria-label="delete"
-              onClick={() => {
-                handleClick();
-              }}
-            >
-              <EditIcon />
-            </IconButton>
-          </ButtonGroup>
+    <Box key={id} sx={{ p: 1 }}>
+      <Stack alignItems="start" spacing={2}>
+        <Stack spacing={2} direction="row" alignItems="center">
+          <Avatar>{selectedUser?.username.charAt(0)}</Avatar>
+          <Typography fontWeight="bold">{selectedUser?.username}</Typography>
+          <Typography>{result} ago</Typography>
         </Stack>
-        <NoteForm
-          issueId={issueId}
-          onSubmit={handleEdit}
-          currentValues={note}
-          edit
-          open={openForm}
-          onClose={handleCloseForm}
-        />
-      </Box>
-    </Card>
+        <Stack>
+          <Typography>{summary}</Typography>
+        </Stack>
+        <ButtonGroup>
+          <IconButton
+            color="primary"
+            aria-label="delete"
+            onClick={() => {
+              handleDelete();
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+          <IconButton
+            color="primary"
+            aria-label="delete"
+            onClick={() => {
+              handleClick();
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+        </ButtonGroup>
+      </Stack>
+      <NoteForm
+        issueId={issueId}
+        onSubmit={handleEdit}
+        currentValues={note}
+        edit
+        open={openForm}
+        onClose={handleCloseForm}
+      />
+    </Box>
   );
 }

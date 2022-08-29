@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState, AppThunk } from '../store';
 import authService from '../services/auth';
-import { setMessage } from './messageReducer';
+import { notify } from './messageReducer';
 
 const user = localStorage.getItem('user');
 
@@ -39,6 +39,7 @@ const authSlice = createSlice({
     },
     removeUser: (state) => {
       state.user = null;
+      state.isLoggedIn = false;
     },
   },
 });
@@ -51,12 +52,13 @@ export const login =
     try {
       const userData = await authService.login(credentials);
       dispatch(setUser(userData));
+      dispatch(notify('Logged in', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 
@@ -66,12 +68,13 @@ export const logout =
     try {
       await authService.logout(userId);
       dispatch(removeUser());
+      dispatch(notify('Logged out', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 
@@ -81,12 +84,13 @@ export const register =
     try {
       const userData = await authService.register(credentials);
       dispatch(setUser(userData));
+      dispatch(notify('registered', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 export const selectAuthState = (state: RootState) => state.auth;

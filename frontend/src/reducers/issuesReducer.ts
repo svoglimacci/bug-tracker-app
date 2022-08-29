@@ -3,7 +3,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppThunk, RootState } from '../store';
 import issuesService from '../services/issues';
-import { setMessage } from './messageReducer';
+import { notify } from './messageReducer';
 import { IssuePayload, Issue, NotePayload, Priority, Status } from '../types';
 
 interface IssuesState {
@@ -104,12 +104,13 @@ export const deleteNote =
     try {
       await issuesService.removeNote(noteId);
       dispatch(removeNote({ noteId, issueId }));
+      dispatch(notify('Note deleted!', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 
@@ -120,12 +121,13 @@ export const createNote =
       dispatch(setIssuesLoading());
       const newNote = await issuesService.createNote(noteData);
       dispatch(addNote(newNote));
+      dispatch(notify('New note added!', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 
@@ -136,12 +138,13 @@ export const createIssue =
       dispatch(setIssuesLoading());
       const newIssue = await issuesService.create(issueData);
       dispatch(addIssue(newIssue));
+      dispatch(notify('New issue added!', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 
@@ -152,12 +155,13 @@ export const editNote =
       dispatch(setIssuesLoading());
       const updatedNote = await issuesService.editNote(noteData);
       dispatch(updateNote(updatedNote));
+      dispatch(notify('Note updated!', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 
@@ -168,12 +172,13 @@ export const editIssue =
       dispatch(setIssuesLoading());
       const updatedIssue = await issuesService.edit(issueData);
       dispatch(updateIssue(updatedIssue));
+      dispatch(notify('Issue updated!', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 
@@ -188,7 +193,7 @@ export const getIssues = (): AppThunk => async (dispatch) => {
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
-    dispatch(setMessage(message));
+    dispatch(notify(`${message}`, 'error'));
   }
 };
 
@@ -198,12 +203,13 @@ export const deleteIssue =
     try {
       await issuesService.remove(issueId);
       dispatch(removeIssue(issueId));
+      dispatch(notify('Issue deleted!', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 

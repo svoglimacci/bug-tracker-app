@@ -1,17 +1,18 @@
 import { Action, configureStore } from '@reduxjs/toolkit';
 import { ThunkAction } from 'redux-thunk';
-import authSlice from './reducers/authReducer';
+import authReducer from './reducers/authReducer';
 import issuesReducer from './reducers/issuesReducer';
-
+import messageReducer from './reducers/messageReducer';
 import projectsReducer from './reducers/projectsReducer';
-import userSlice from './reducers/usersReducer';
+import userReducer from './reducers/usersReducer';
 
 export const store = configureStore({
   reducer: {
-    auth: authSlice,
-    users: userSlice,
+    auth: authReducer,
+    users: userReducer,
     projects: projectsReducer,
     issues: issuesReducer,
+    message: messageReducer,
   },
 });
 

@@ -3,6 +3,7 @@ import { SessionInput, SessionOutput } from '../models/Session';
 
 export const create = async (payload: SessionInput): Promise<SessionOutput> => {
   const session = await Session.create(payload);
+
   return session;
 };
 

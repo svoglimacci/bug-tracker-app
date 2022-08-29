@@ -1,6 +1,5 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-
 import routes from './api/routes';
 import dbInit from './db/init';
 
@@ -9,6 +8,7 @@ const PORT = 3001;
 
 export const get = () => {
   const app: Application = express();
+
   app.use(express.json());
   app.use(cors());
 

@@ -1,8 +1,9 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppThunk, RootState } from '../store';
 import projectsService from '../services/projects';
-import { setMessage } from './messageReducer';
+import { notify } from './messageReducer';
 import { ProjectPayload, Project, User } from '../types';
 
 interface ProjectsState {
@@ -62,12 +63,13 @@ export const createProject =
       dispatch(setProjectsLoading());
       const newProject = await projectsService.create(projectData);
       dispatch(addProject(newProject));
+      dispatch(notify('Project added!', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 
@@ -77,14 +79,14 @@ export const editProject =
     try {
       dispatch(setProjectsLoading());
       const updatedProject = await projectsService.edit(projectData);
-
+      dispatch(notify('Project updated!', 'success'));
       dispatch(updateProject(updatedProject));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 export const getProjects = (): AppThunk => async (dispatch) => {
@@ -98,7 +100,7 @@ export const getProjects = (): AppThunk => async (dispatch) => {
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
-    dispatch(setMessage(message));
+    dispatch(notify(`${message}`, 'error'));
   }
 };
 
@@ -108,12 +110,13 @@ export const deleteProject =
     try {
       await projectsService.remove(projectId);
       dispatch(removeProject(projectId));
+      dispatch(notify('Project deleted!', 'success'));
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      dispatch(setMessage(message));
+      dispatch(notify(`${message}`, 'error'));
     }
   };
 

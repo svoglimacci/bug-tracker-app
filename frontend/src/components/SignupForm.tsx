@@ -47,7 +47,7 @@ export default function LoginForm({ onSubmit }: Props) {
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
         <Input control={control} name="username" rules={{ required: true }} />
         <Input control={control} name="password" rules={{ required: true }} />
-        <Input control={control} name="confirmPassword" rules={{ required: true }} />
+
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           Register
         </Button>

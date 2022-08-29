@@ -115,7 +115,7 @@ export default function ProjectCard(props: Project) {
     users: users?.map((u) => u.id),
   };
   return (
-    <Card sx={{ width: 300, height: '100%' }}>
+    <Card sx={{ maxWidth: '368px', height: '100%' }} variant="outlined">
       <CardHeader title={title} action={MenuButton(id, currentValues)} />
 
       <CardContent>
