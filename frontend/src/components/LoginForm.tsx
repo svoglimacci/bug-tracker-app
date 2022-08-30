@@ -1,7 +1,18 @@
 /* eslint-disable react/destructuring-assignment */
 import * as React from 'react';
 import { useForm, useController, UseControllerProps } from 'react-hook-form';
-import { Grid, Link, Typography, TextField, Button, Box } from '@mui/material';
+import {
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Alert,
+  AlertTitle,
+  Paper,
+  Stack,
+} from '@mui/material';
+import BugReport from '@mui/icons-material/BugReport';
 
 type FormValues = {
   username: string;
@@ -40,23 +51,35 @@ export default function LoginForm({ onSubmit }: Props) {
         alignItems: 'center',
       }}
     >
-      <Typography component="h1" variant="h5">
-        Sign in
-      </Typography>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
-        <Input control={control} name="username" rules={{ required: true }} />
-        <Input control={control} name="password" rules={{ required: true }} />
-        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-          Sign In
-        </Button>
-        <Grid container>
-          <Grid item>
-            <Link href="/register" variant="body2">
-              Don&apos;t have an account? Sign Up
-            </Link>
+      <Paper sx={{ padding: 4, mt: 3 }} elevation={2}>
+        <Stack direction="row">
+          <BugReport color="primary" fontSize="large" sx={{ mr: 1 }} />
+          <Typography variant="h6" sx={{ lineHeight: '1.8' }}>
+            Sign In
+          </Typography>
+        </Stack>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          sx={{ mt: 1, width: 320 }}
+        >
+          <Input control={control} name="username" rules={{ required: true }} />
+          <Input control={control} name="password" rules={{ required: true }} />
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, py: 1 }}>
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item width="100%">
+              <Alert variant="outlined" severity="info">
+                <AlertTitle>Demo Credentials</AlertTitle>
+                <strong>Username:</strong> username123 <br />
+                <strong>Password: </strong> password123
+              </Alert>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      </Paper>
     </Box>
   );
 }

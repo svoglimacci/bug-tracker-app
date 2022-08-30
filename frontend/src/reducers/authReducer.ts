@@ -77,7 +77,7 @@ export const logout =
       dispatch(notify(`${message}`, 'error'));
     }
   };
-
+/*
 export const register =
   (credentials: CredentialsPayload): AppThunk =>
   async (dispatch) => {
@@ -93,6 +93,7 @@ export const register =
       dispatch(notify(`${message}`, 'error'));
     }
   };
+  */
 export const selectAuthState = (state: RootState) => state.auth;
 
 export default authSlice.reducer;

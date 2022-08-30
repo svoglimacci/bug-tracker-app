@@ -6,9 +6,15 @@ const sessionsRouter = Router();
 
 sessionsRouter.post('/login', async (req: Request, res: Response) => {
   const payload: LoginDTO = req.body;
-
-  const result = await sessionController.login(payload);
-  return res.status(200).send(result);
+  try {
+    const result = await sessionController.login(payload);
+    return res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    return res.status(401).json({
+      error: 'invalid username or password',
+    });
+  }
 });
 
 sessionsRouter.delete('/logout', async (req: Request, res: Response) => {

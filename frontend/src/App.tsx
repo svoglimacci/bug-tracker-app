@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Navigate, Route, Routes, useLocation } from 'r
 import { useSelector } from 'react-redux';
 import { Container, CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import SignupPage from './SignupPage';
+
 import LoginPage from './LoginPage';
+import NotFoundPage from './NotFoundPage';
 import SnackBar from './components/SnackBar';
 import ProjectsPage from './ProjectsPage';
 import { RootState } from './store';
@@ -46,14 +47,10 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <CssBaseline />
-        <Container>
+        <Container sx={{ height: '100vh' }}>
           {isLoggedIn ? <NavBar /> : null}
           <Routes>
             <Route path="/" element={!isLoggedIn ? <LoginPage /> : <Navigate to="/Projects" />} />
-            <Route
-              path="/register"
-              element={!isLoggedIn ? <SignupPage /> : <Navigate to="/Register" />}
-            />
 
             <Route
               path="/projects"
@@ -79,6 +76,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
           <SnackBar />
         </Container>

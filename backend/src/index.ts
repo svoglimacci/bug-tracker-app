@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import routes from './api/routes';
 import dbInit from './db/init';
+import middleware from './middleware';
 
 dbInit();
 const PORT = 3001;
@@ -19,7 +20,8 @@ export const get = () => {
   });
 
   app.use('/api/', routes);
-
+  app.use(middleware.unknownEndPointHandler);
+  app.use(middleware.errorHandler);
   return app;
 };
 
