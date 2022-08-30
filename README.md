@@ -20,10 +20,10 @@ Fullstack bug tracking project made as a way to learn Typescript with ReactJS & 
 
 ## Screenshots
 
-![Login](https://github.com/svoglimacci/bug-tracker-app/tree/main/screenshots/login.jpg)
-![Home](https://github.com/svoglimacci/bug-tracker-app/tree/main/screenshots/Home.jpg)
-![Form](https://github.com/svoglimacci/bug-tracker-app/tree/main/screenshots/NewProject.jpg)
-![Issues](https://github.com/svoglimacci/bug-tracker-app/tree/main/screenshots/Issues.jpg)
-![Notes](https://github.com/svoglimacci/bug-tracker-app/tree/main/screenshots/Notes.jpg)
+![Login](/screenshots/login.jpg)
+![Home](/screenshots/Home.jpg)
+![Form](/screenshots/NewProject.jpg)
+![Issues](/screenshots/Issues.jpg)
+![Notes](/screenshots/Notes.jpg)
 
 
