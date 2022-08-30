@@ -9,7 +9,7 @@ services:
     volumes:
       - ./frontend/:/usr/src/app
     ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+      - 3000:3000
     env_file: .env
 
   backend:
@@ -21,7 +21,7 @@ services:
     volumes:
        - ./backend/:/usr/src/app
     ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - 3001:3001
     depends_on:
       - database
     links:
